@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<style type="text/css">
+	.border1{
+		width: 501px;
+		height: 200px;
+		border: 1px solid skyblue;
+		margin: 0 auto;
+	}
+	.border1 tr{
+		width: 500px;
+		height: 50px;
+	}
+	.border1 tr td{
+		width:100px;
+		height: 50px;
+		text-align: center;
+		line-height: 50px;
+
+	}
+	.ul-1{
+		list-style: none;
+		width: 525px;
+		height: 30px;
+		margin: 0 auto;
+		margin-bottom: 40px;
+		margin-top: 20px;
+	}
+	.ul-1 li:first-child{
+		margin-left: -10px;
+	}
+	.ul-1 li{
+		float: left;
+		width: 90px;
+		height: 40px;
+		margin-left: 15px;
+		border-radius: 8px;
+		text-align: center;
+		line-height: 40px;
+		color: #fff;
+	}
+	.default{
+		background-color: #ccc;
+	}
+	.info{
+		background-color: DeepSkyBlue;
+	}
+	.warning{
+		background-color: orange;
+	}
+	.danger{
+		background-color: red;
+	}
+	.success{
+		background-color: green;
+	}
+	.shallow-blue{
+		background-color:skyblue ;
+		opacity: 0.6;
+	}
+	</style>
+</head>
+<body>
+	<ul class="ul-1">
+		<li class="default" draggable='true'>语文</li>
+		<li class="info" draggable='true'>数学</li>
+		<li class="warning" draggable='true'>英语</li>
+		<li class="danger" draggable='true'>物理</li>
+		<li class="success" draggable='true'>化学</li>
+	</ul>
+	<!-- <div style="clear:both"></div> -->
+	<table border="1" cellspacing="0" class="border1">
+		<tr>
+			<td>星期一</td>
+			<td>星期二</td>
+			<td>星期三</td>
+			<td>星期四</td>
+			<td>星期五</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+	</table>
+</body>
+<script type="text/javascript">
+	var lis = document.querySelectorAll(".ul-1 li")
+	var tr1 = document.querySelectorAll(".border1 tr");
+	var td1 = document.querySelectorAll(".border1 tr td");
+	//拖拽区
+		//开始拖拽时将 被拖拽的li的类名和内容通过dataTransfer设置
+	for(var n=0;n<lis.length;n++){
+		lis[n].ondragstart=function(e){
+			jsonObj = {"className":this.className,"Html":this.innerHTML};
+			jsonStr = JSON.stringify(jsonObj);
+			e.dataTransfer.setData("text",jsonStr);
+		}
+	}
+
+	//投放区
+	for(var i = 1;i<tr1.length;i++){
+		for(var j = 5;j<td1.length;j++){
+			td1[j].ondragenter=function(){
+				this.classList.add("shallow-blue");
+			}
+			//阻止浏览器的默认行为，否则不能拖放在投放区
+			td1[j].ondragover=function(e){
+				e.preventDefault();
+			}
+			td1[j].ondragleave=function(){
+				this.classList.remove("shallow-blue");
+			}
+			//获取
+			td1[j].ondrop=function(e){
+				var jsonStr = e.dataTransfer.getData("text");
+				var jsonObj = JSON.parse(jsonStr);
+				this.className="";
+				this.classList.add(jsonObj.className);
+				this.innerHTML=jsonObj.Html;
+			}
+		}
+	}
+</script>
+</html>
